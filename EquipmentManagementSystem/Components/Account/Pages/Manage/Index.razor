@@ -20,8 +20,12 @@
             <DataAnnotationsValidator/>
             <ValidationSummary class="text-danger" role="alert"/>
             <div class="form-floating mb-3">
-                <input type="text" value="@username" id="username" class="form-control" placeholder="Choose your username." disabled/>
-                <label for="username" class="form-label">Username</label>
+                <input type="text" value="@firstName" id="username" class="form-control" placeholder="Choose your username." disabled/>
+                <label for="username" class="form-label">First Name</label>
+            </div>
+            <div class="form-floating mb-3">
+                <input type="text" value="@lastName" id="username" class="form-control" placeholder="Choose your username." disabled/>
+                <label for="username" class="form-label">Last Name</label>
             </div>
             <div class="form-floating mb-3">
                 <InputText @bind-Value="Input.PhoneNumber" id="Input.PhoneNumber" class="form-control" placeholder="Enter your phone number"/>
@@ -35,18 +39,22 @@
 
 @code {
     private ApplicationUser user = default!;
-    private string? username;
+    private string? firstName;
+    private string? lastName;
     private string? phoneNumber;
 
-    [CascadingParameter] private HttpContext HttpContext { get; set; } = default!;
+    [CascadingParameter] 
+    private HttpContext HttpContext { get; set; } = default!;
 
-    [SupplyParameterFromForm] private InputModel Input { get; set; } = new();
+    [SupplyParameterFromForm] 
+    private InputModel Input { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
-        username = await UserManager.GetUserNameAsync(user);
         phoneNumber = await UserManager.GetPhoneNumberAsync(user);
+        firstName = user.FirstName;
+        lastName = user.LastName;
 
         Input.PhoneNumber ??= phoneNumber;
     }
