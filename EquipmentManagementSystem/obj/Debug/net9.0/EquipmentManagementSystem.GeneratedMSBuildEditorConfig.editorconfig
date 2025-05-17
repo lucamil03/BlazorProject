@@ -108,8 +108,20 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ib21lLnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/Tools.razor]
-build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ub29scy5yYXpvcg==
+[/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/MyReservations.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9NeVJlc2VydmF0aW9ucy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/ToolDetailView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ub29sRGV0YWlsVmlldy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/ToolListView.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ub29sTGlzdFZpZXcucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/ToolReserve.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50cy9QYWdlcy9Ub29sUmVzZXJ2ZS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [/Users/lucamilchrahm/Documents/FHStudium/4Semester/Serverseitige Webentwicklung&DataManagement/BlazorProject/EquipmentManagementSystem/Components/Pages/UserManagement.razor]

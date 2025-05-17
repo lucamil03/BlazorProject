@@ -1,0 +1,152 @@
+@page "/tool/{ToolId:int}/reserve"
+@using EquipmentManagementSystem.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext DbContext
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@attribute [Authorize(Roles = "User,Admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Werkzeug reservieren</PageTitle>
+
+<h3>Reservierung<AuthorizeView Roles="Admin">/Wartung</AuthorizeView> erstellen</h3>
+
+@if (tool == null)
+{
+    <p><em>Lade Werkzeugdaten...</em></p>
+}
+else
+{
+    <EditForm Model="newReservation" OnValidSubmit="HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="mb-3">
+            <label class="form-label">Werkzeug</label>
+            <input class="form-control" value="@tool.Name" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mitarbeiter</label>
+            <input class="form-control" value="@currentUser?.FirstName @currentUser?.LastName" disabled />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Typ</label>
+            <AuthorizeView Roles="Admin" Context="userContext">
+                <Authorized>
+                    <InputSelect @bind-Value="newReservation.Type" class="form-control">
+                        @foreach (ReservationType reservationType in Enum.GetValues(typeof(ReservationType)))
+                        {
+                            <option value="@reservationType">@reservationType</option>
+                        }
+                    </InputSelect>
+                </Authorized>
+                <NotAuthorized>
+                    <InputSelect @bind-Value="newReservation.Type" class="form-control" disabled>
+                        <option value="@newReservation.Type">@newReservation.Type</option>
+                    </InputSelect>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+
+        <div class="mb-3">
+            <label class="form-label">Startdatum</label>
+            <InputDate @bind-Value="newReservation.StartDate" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Enddatum</label>
+            <InputDate @bind-Value="newReservation.EndDate" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary" type="submit">Reservieren</button>
+        <button class="btn btn-secondary ms-2" @onclick="NavigateBack">Abbrechen</button>
+
+        @if (!string.IsNullOrEmpty(errorMessage))
+        {
+            <div class="alert alert-danger mt-3">@errorMessage</div>
+        }
+    </EditForm>
+}
+
+@code {
+    [Parameter] public int ToolId { get; set; }
+
+    private Tool? tool;
+    private ApplicationUser? currentUser;
+    private Reservation newReservation = new();
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tool = await DbContext.Tools.FindAsync(ToolId);
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = await UserManager.GetUserAsync(authState.User);
+
+        if (currentUser != null)
+        {
+            newReservation.ToolId = ToolId;
+            newReservation.UserId = currentUser.Id;
+            newReservation.Type = ReservationType.Reservierung;
+            newReservation.StartDate = DateTime.Today;
+            newReservation.EndDate = DateTime.Today.AddDays(1);
+        }
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        var startDateUtc = ToUtcDate(newReservation.StartDate);
+        var endDateUtc = ToUtcDate(newReservation.EndDate);       
+        
+        errorMessage = null;
+
+        if (newReservation.EndDate < newReservation.StartDate)
+        {
+            errorMessage = "Das Enddatum darf nicht vor dem Startdatum liegen.";
+            return;
+        }
+        
+        if (newReservation.StartDate < DateTime.Today)
+        {
+            errorMessage = "Das Startdatum darf nicht in der Vergangenheit liegen.";
+            return;
+        }
+
+        var conflicts = await DbContext.Reservations
+            .Where(r => r.ToolId == ToolId &&
+                        r.EndDate >= startDateUtc &&
+                        r.StartDate <= endDateUtc)
+            .ToListAsync();
+
+        if (conflicts.Any())
+        {
+            errorMessage = "In dem gewählten Zeitraum existiert bereits eine Reservierung oder Wartung.";
+            return;
+        }
+        
+        newReservation.StartDate = startDateUtc;
+        newReservation.EndDate = endDateUtc;
+
+        DbContext.Reservations.Add(newReservation);
+        await DbContext.SaveChangesAsync();
+
+        NavigationManager.NavigateTo($"/tool/{ToolId}", true);
+    }
+
+    private DateTime ToUtcDate(DateTime date)
+    {
+        if (date.Kind == DateTimeKind.Utc)
+            return date;
+        return date.ToUniversalTime();
+    }
+
+    private void NavigateBack()
+    {
+        NavigationManager.NavigateTo($"/tool/{ToolId}", true);
+    }
+}

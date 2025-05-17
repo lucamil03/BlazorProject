@@ -1,0 +1,61 @@
+@page "/tools"
+@using EquipmentManagementSystem.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+
+@rendermode InteractiveServer
+@attribute [Authorize(Roles = "User,Admin")]
+
+<PageTitle>Werkzeugliste</PageTitle>
+<h1 class="mb-4">Werkzeugliste</h1>
+
+@if (tools is null)
+{
+    <p>Lade Werkzeuge...</p>
+}
+else if (!tools.Any())
+{
+    <p>Keine Werkzeuge gefunden.</p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Aktueller Status</th>
+            <th>Standort</th>
+            <th>Kurzbeschreibung</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var tool in tools)
+        {
+            <tr ondblclick="@(() => NavigateToDetail(tool.Id))" style="cursor: pointer;">
+                <td>@tool.Name</td>
+                <td>@tool.Status</td>
+                <td>@tool.Location</td>
+                <td>@tool.Description</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Tool>? tools;
+
+    protected override async Task OnInitializedAsync()
+    {
+        tools = await DbContext.Tools
+            .OrderBy(t => t.Name)
+            .ToListAsync();
+    }
+
+    private void NavigateToDetail(int toolId)
+    {
+        NavigationManager.NavigateTo($"/tool/{toolId}", true);
+    }
+}

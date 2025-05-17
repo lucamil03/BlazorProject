@@ -1,0 +1,101 @@
+@page "/myReservations"
+@using EquipmentManagementSystem.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext DbContext
+@inject UserManager<ApplicationUser> UserManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "User,Admin")]
+@rendermode InteractiveServer
+
+<h3>Meine Reservierungen</h3>
+
+@if (reservations == null)
+{
+    <p><em>Lade Reservierungen...</em></p>
+}
+else if (!reservations.Any())
+{
+    <p>Keine Reservierungen gefunden.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Werkzeug</th>
+                <th>Startdatum</th>
+                <th>Enddatum</th>
+                <th>Typ</th>
+                <th>Aktion</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var reservation in reservations)
+            {
+                <tr>
+                    <td>@reservation.Tool.Name</td>
+                    <td>@reservation.StartDate.ToLocalTime().ToString("g")</td>
+                    <td>@reservation.EndDate.ToLocalTime().ToString("g")</td>
+                    <td>@reservation.Type</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteReservation(reservation.Id)">Löschen</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@code {
+    private List<Reservation>? reservations;
+    private ApplicationUser? currentUser;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        currentUser = await UserManager.GetUserAsync(authState.User);
+
+        if (currentUser != null)
+        {
+            reservations = await DbContext.Reservations
+                .Where(r => r.UserId == currentUser.Id)
+                .Include(r => r.Tool)
+                .OrderByDescending(r => r.StartDate)
+                .ToListAsync();
+        }
+    }
+
+    private async Task DeleteReservation(int reservationId)
+    {
+        errorMessage = null;
+
+        var reservation = await DbContext.Reservations.FindAsync(reservationId);
+
+        if (reservation == null)
+        {
+            errorMessage = "Reservierung nicht gefunden.";
+            return;
+        }
+
+        if (reservation.UserId != currentUser?.Id)
+        {
+            errorMessage = "Du kannst nur deine eigenen Reservierungen löschen.";
+            return;
+        }
+
+        DbContext.Reservations.Remove(reservation);
+        await DbContext.SaveChangesAsync();
+
+        NavigationManager.NavigateTo("/myReservations", true);
+
+    }
+}

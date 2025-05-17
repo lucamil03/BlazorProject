@@ -1,0 +1,96 @@
+@page "/tool/{ToolId:int}"
+@using EquipmentManagementSystem.Data
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "User,Admin")]
+@rendermode InteractiveServer
+
+<PageTitle>Werkzeug</PageTitle>
+
+<button class="btn btn-secondary mb-3" @onclick="NavigateBack">Zurück zur Liste</button>
+
+<h1>Werkzeugdetails</h1>
+
+@if (tool == null)
+{
+    <p><em>Lade Werkzeugdaten...</em></p>
+}
+else
+{
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="mb-3">@tool.Name</h5>
+            <p><b>Aktueller Status:</b> @tool.Status</p>
+            <p><b>Standort:</b> @tool.Location</p>
+            <p><b>Beschreibung:</b> @tool.Description</p>
+        </div>
+    </div>
+
+    <button class="btn btn-primary mb-4" @onclick="NavigateToReserve">Werkzeug reservieren<AuthorizeView Roles="Admin">/warten</AuthorizeView></button>
+
+    
+    <h4>Reservierungen und Wartungen</h4>
+    @if (reservations.Count == 0)
+    {
+        <p>Keine Reservierungen oder Wartungen für dieses Werkzeug.</p>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Startdatum</th>
+                    <th>Enddatum</th>
+                    <th>Typ</th>
+                    <th>Mitarbeiter</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var res in reservations)
+                {
+                    <tr>
+                        <td>@res.StartDate.ToString("dd.MM.yyyy")</td>
+                        <td>@res.EndDate.ToString("dd.MM.yyyy")</td>
+                        <td>@(res.Type == ReservationType.Wartung ? "Wartung" : "Reservierung")</td>
+                        <td>@res.User?.FirstName @res.User?.LastName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}
+
+@code {
+    [Parameter] public int ToolId { get; set; }
+
+    private Tool? tool;
+    private List<Reservation> reservations = new();
+
+    protected override async Task OnParametersSetAsync()
+    {
+        tool = await DbContext.Tools.FindAsync(ToolId);
+
+        reservations = await DbContext.Reservations
+            .Where(r => r.ToolId == ToolId)
+            .OrderByDescending(r => r.StartDate)
+            .ToListAsync();
+
+        // Optional: Lade auch User-Daten in einem Schritt (wenn Lazy Loading nicht aktiv ist)
+        foreach (var res in reservations)
+        {
+            res.User = await DbContext.Users.FindAsync(res.UserId);
+        }
+    }
+
+    private void NavigateBack()
+    {
+        NavigationManager.NavigateTo("/tools", true);
+    }
+
+    private void NavigateToReserve()
+    {
+        NavigationManager.NavigateTo($"/tool/{ToolId}/reserve", true);
+    }
+}

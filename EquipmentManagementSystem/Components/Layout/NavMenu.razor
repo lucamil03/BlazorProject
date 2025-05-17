@@ -27,7 +27,14 @@
         <AuthorizeView Roles="User,Admin">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/tools">
-                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Tools
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Werkzeuge
+                </NavLink>
+            </div>
+        </AuthorizeView>
+        <AuthorizeView Roles="User,Admin">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/myReservations">
+                    <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Meine Reservierungen
                 </NavLink>
             </div>
         </AuthorizeView>
@@ -35,7 +42,7 @@
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> @context.User.Identity?.Name
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Mein Konto
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
