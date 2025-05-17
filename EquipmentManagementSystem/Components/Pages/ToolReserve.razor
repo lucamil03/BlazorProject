@@ -93,16 +93,13 @@ else
             newReservation.ToolId = ToolId;
             newReservation.UserId = currentUser.Id;
             newReservation.Type = ReservationType.Reservierung;
-            newReservation.StartDate = DateTime.Today;
-            newReservation.EndDate = DateTime.Today.AddDays(1);
+            newReservation.StartDate = DateOnly.FromDateTime(DateTime.Today);
+            newReservation.EndDate = DateOnly.FromDateTime(DateTime.Today.AddDays(1));
         }
     }
 
     private async Task HandleValidSubmit()
     {
-        var startDateUtc = ToUtcDate(newReservation.StartDate);
-        var endDateUtc = ToUtcDate(newReservation.EndDate);       
-        
         errorMessage = null;
 
         if (newReservation.EndDate < newReservation.StartDate)
@@ -110,8 +107,8 @@ else
             errorMessage = "Das Enddatum darf nicht vor dem Startdatum liegen.";
             return;
         }
-        
-        if (newReservation.StartDate < DateTime.Today)
+
+        if (newReservation.StartDate < DateOnly.FromDateTime(DateTime.Today))
         {
             errorMessage = "Das Startdatum darf nicht in der Vergangenheit liegen.";
             return;
@@ -119,8 +116,8 @@ else
 
         var conflicts = await DbContext.Reservations
             .Where(r => r.ToolId == ToolId &&
-                        r.EndDate >= startDateUtc &&
-                        r.StartDate <= endDateUtc)
+                        r.EndDate >= newReservation.StartDate &&
+                        r.StartDate <= newReservation.EndDate)
             .ToListAsync();
 
         if (conflicts.Any())
@@ -128,9 +125,6 @@ else
             errorMessage = "In dem gewählten Zeitraum existiert bereits eine Reservierung oder Wartung.";
             return;
         }
-        
-        newReservation.StartDate = startDateUtc;
-        newReservation.EndDate = endDateUtc;
 
         DbContext.Reservations.Add(newReservation);
         await DbContext.SaveChangesAsync();

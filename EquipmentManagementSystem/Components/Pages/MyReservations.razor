@@ -10,6 +10,8 @@
 @attribute [Authorize(Roles = "User,Admin")]
 @rendermode InteractiveServer
 
+<PageTitle>Meine Reservierungen</PageTitle>
+
 <h3>Meine Reservierungen</h3>
 
 @if (reservations == null)
@@ -37,8 +39,8 @@ else
             {
                 <tr>
                     <td>@reservation.Tool.Name</td>
-                    <td>@reservation.StartDate.ToLocalTime().ToString("g")</td>
-                    <td>@reservation.EndDate.ToLocalTime().ToString("g")</td>
+                    <td>@reservation.StartDate.ToString("dd.MM.yyyy")</td>
+                    <td>@reservation.EndDate.ToString("dd.MM.yyyy")</td>
                     <td>@reservation.Type</td>
                     <td>
                         <button class="btn btn-danger btn-sm" @onclick="() => DeleteReservation(reservation.Id)">Löschen</button>

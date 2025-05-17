@@ -35,7 +35,7 @@ else
         {
             <tr ondblclick="@(() => NavigateToDetail(tool.Id))" style="cursor: pointer;">
                 <td>@tool.Name</td>
-                <td>@tool.Status</td>
+                <td>@ToolStatusHelper.GetStatusLabel(tool, tool.Reservations.ToList())</td>
                 <td>@tool.Location</td>
                 <td>@tool.Description</td>
             </tr>
@@ -50,6 +50,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         tools = await DbContext.Tools
+            .Include(t => t.Reservations) //sonst haben wir die Reservations nicht dabei
             .OrderBy(t => t.Name)
             .ToListAsync();
     }

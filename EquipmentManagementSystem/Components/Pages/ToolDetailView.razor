@@ -22,7 +22,7 @@ else
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="mb-3">@tool.Name</h5>
-            <p><b>Aktueller Status:</b> @tool.Status</p>
+            <p><b>Aktueller Status:</b> @ToolStatusHelper.GetStatusLabel(tool, reservations)</p>
             <p><b>Standort:</b> @tool.Location</p>
             <p><b>Beschreibung:</b> @tool.Description</p>
         </div>
