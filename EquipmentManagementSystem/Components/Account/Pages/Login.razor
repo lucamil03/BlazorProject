@@ -12,16 +12,16 @@
 @inject IdentityRedirectManager RedirectManager
 @inject IdentityUserAccessor UserAccessor
 
-<PageTitle>Log in</PageTitle>
+<PageTitle>Einloggen</PageTitle>
 
-<h1>Log in</h1>
+<h1>Einloggen</h1>
 <div class="row">
     <div class="col-lg-6">
         <section>
             <StatusMessage Message="@errorMessage"/>
             <EditForm Model="Input" method="post" OnValidSubmit="LoginUser" FormName="login">
                 <DataAnnotationsValidator/>
-                <h2>Use a local account to log in.</h2>
+                <h4>Verwende einen bereits registierten Benutzer.</h4>
                 <hr/>
                 <ValidationSummary class="text-danger" role="alert"/>
                 <div class="form-floating mb-3">
@@ -30,22 +30,22 @@
                     <ValidationMessage For="() => Input.Email" class="text-danger"/>
                 </div>
                 <div class="form-floating mb-3">
-                    <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password"/>
-                    <label for="Input.Password" class="form-label">Password</label>
+                    <InputText type="password" @bind-Value="Input.Password" id="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Passwort"/>
+                    <label for="Input.Password" class="form-label">Passwort</label>
                     <ValidationMessage For="() => Input.Password" class="text-danger"/>
                 </div>
                 <div class="checkbox mb-3">
                     <label class="form-label">
                         <InputCheckbox @bind-Value="Input.RememberMe" class="darker-border-checkbox form-check-input"/>
-                        Remember me
+                        Eingeloggt bleiben
                     </label>
                 </div>
                 <div>
-                    <button type="submit" class="mb-3 w-100 btn btn-lg btn-primary">Log in</button>
+                    <button type="submit" class="mb-3 w-100 btn btn-lg btn-primary">Einloggen</button>
                 </div>
                 <div>
                     <p>
-                        <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Register as a new user</a>
+                        <a href="@(NavigationManager.GetUriWithQueryParameters("Account/Register", new Dictionary<string, object?> { ["ReturnUrl"] = ReturnUrl }))">Neuen Benutzer registrieren</a>
                     </p>
                 </div>
             </EditForm>

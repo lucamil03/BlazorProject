@@ -1,0 +1,50 @@
+@page "/tools/create"
+@using Microsoft.AspNetCore.Authorization
+@using EquipmentManagementSystem.Data
+@inject ApplicationDbContext DbContext
+@inject NavigationManager NavigationManager
+@attribute [Authorize(Roles = "Admin")]
+@rendermode InteractiveServer
+<PageTitle>Werkzeug anlegen</PageTitle>
+
+<h3>Neues Werkzeug anlegen</h3>
+
+<EditForm Model="newTool" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label>Name:</label>
+        <InputText class="form-control" @bind-Value="newTool.Name" />
+    </div>
+
+    <div class="mb-3">
+        <label>Standort:</label>
+        <InputText class="form-control" @bind-Value="newTool.Location" />
+    </div>
+
+    <div class="mb-3">
+        <label>Kurzbeschreibung:</label>
+        <InputTextArea class="form-control" @bind-Value="newTool.Description" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Anlegen</button>
+    <button type="button" class="btn btn-secondary ms-2" @onclick="NavigateBack">Abbrechen</button>
+</EditForm>
+
+@code {
+    private Tool newTool = new();
+
+    private async Task HandleValidSubmit()
+    {
+        DbContext.Tools.Add(newTool);
+        await DbContext.SaveChangesAsync();
+        NavigationManager.NavigateTo("/tools", true);
+    }
+
+    private void NavigateBack()
+    {
+        NavigationManager.NavigateTo("/tools", true);
+    }
+
+}

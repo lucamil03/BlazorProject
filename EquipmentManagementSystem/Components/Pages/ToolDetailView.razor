@@ -9,9 +9,12 @@
 
 <PageTitle>Werkzeug</PageTitle>
 
-<button class="btn btn-secondary mb-3" @onclick="NavigateBack">Zurück zur Liste</button>
+<div class="d-flex justify-content-between">
+    <button class="btn btn-secondary mb-3" @onclick="NavigateBack">Zurück zur Liste</button>
+    <button class="btn btn-primary mb-3" @onclick="NavigateToReserve">Werkzeug reservieren<AuthorizeView Roles="Admin">/warten</AuthorizeView></button>
+</div>
 
-<h1>Werkzeugdetails</h1>
+<h2 class="mb-2">Werkzeugdetails</h2>
 
 @if (tool == null)
 {
@@ -19,17 +22,14 @@
 }
 else
 {
-    <div class="card mb-4">
+    <div class="mb-4">
         <div class="card-body">
-            <h5 class="mb-3">@tool.Name</h5>
+            <p><b>Name:</b> @tool.Name</p>
             <p><b>Aktueller Status:</b> @ToolStatusHelper.GetStatusLabel(tool, reservations)</p>
             <p><b>Standort:</b> @tool.Location</p>
             <p><b>Beschreibung:</b> @tool.Description</p>
         </div>
     </div>
-
-    <button class="btn btn-primary mb-4" @onclick="NavigateToReserve">Werkzeug reservieren<AuthorizeView Roles="Admin">/warten</AuthorizeView></button>
-
     
     <h4>Reservierungen und Wartungen</h4>
     @if (reservations.Count == 0)
@@ -38,7 +38,7 @@ else
     }
     else
     {
-        <table class="table table-bordered">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Startdatum</th>
@@ -74,14 +74,9 @@ else
 
         reservations = await DbContext.Reservations
             .Where(r => r.ToolId == ToolId)
+            .Include(r => r.User) 
             .OrderByDescending(r => r.StartDate)
             .ToListAsync();
-
-        // Optional: Lade auch User-Daten in einem Schritt (wenn Lazy Loading nicht aktiv ist)
-        foreach (var res in reservations)
-        {
-            res.User = await DbContext.Users.FindAsync(res.UserId);
-        }
     }
 
     private void NavigateBack()

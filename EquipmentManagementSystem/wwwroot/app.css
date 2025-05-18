@@ -7,9 +7,8 @@ a, .btn-link {
 }
 
 .btn-primary {
-    color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: #04598B;
+    border-color: #04598B;
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
@@ -58,3 +57,19 @@ h1:focus {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
     text-align: start;
 }
+
+:root,
+[data-bs-theme="light"],
+[data-bs-theme="dark"] {
+    --bs-primary: #04598B;
+    --bs-primary-rgb: 4, 89, 139;
+}
+
+.nav-link {
+    color: var(--bs-primary);
+}
+
+.nav-link.active {
+    background-color: var(--bs-primary) !important;
+}
+

@@ -4,7 +4,7 @@
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">EMS</a>
+        <a class="navbar-brand" href=""> 🛠 EMS</a>
     </div>
 </div>
 
@@ -14,13 +14,13 @@
     <nav class="nav flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Startseite
             </NavLink>
         </div>
         <AuthorizeView Roles="Admin">
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/user-management">
-                    <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> User Management
+                    <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Benutzerverwaltung
                 </NavLink>
             </div>
         </AuthorizeView>
@@ -42,7 +42,7 @@
             <Authorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Manage">
-                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Mein Konto
+                        <span class="bi bi-person-fill-nav-menu" aria-hidden="true"></span> Mein Account
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
@@ -50,7 +50,7 @@
                         <AntiforgeryToken/>
                         <input type="hidden" name="ReturnUrl" value="@currentUrl"/>
                         <button type="submit" class="nav-link">
-                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Ausloggen
                         </button>
                     </form>
                 </div>
@@ -58,12 +58,12 @@
             <NotAuthorized>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Register">
-                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+                        <span class="bi bi-person-nav-menu" aria-hidden="true"></span> Registrieren
                     </NavLink>
                 </div>
                 <div class="nav-item px-3">
                     <NavLink class="nav-link" href="Account/Login">
-                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+                        <span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Einloggen
                     </NavLink>
                 </div>
             </NotAuthorized>

@@ -1,55 +1,70 @@
 ﻿@page "/"
+<PageTitle>Startseite</PageTitle>
 
-<PageTitle>Home</PageTitle>
-
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row">
-        <div class="col-12 text-center mb-2">
-            <h1>EMS - <b>E</b>quipment-<b>M</b>anagement-<b>S</b>ystem</h1>
-            <p class="lead mt-3">Die umfassende Lösung für eine effiziente Werkzeug- und Geräteverwaltung in Ihrem Unternehmen.</p>
+        <div class="col-12 text-center mb-4">
+            <h1 class="display-5 fw-bold text-primary">
+                EMS <span class="text-dark">- Equipment-Management-System</span>
+            </h1>
+            <p class="lead text-secondary">
+                Die umfassende Lösung für eine effiziente Werkzeug- und Geräteverwaltung in Ihrem Unternehmen.
+            </p>
         </div>
     </div>
-    
-    <div class="row mt-1">
+
+    <div class="row text-center g-4">
         <div class="col-md-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <i class="oi oi-magnifying-glass" style="font-size: 2rem;"></i>
-                    <h5 class="card-title mt-3">Bestandsübersicht</h5>
-                    <p class="card-text">Behalten Sie den Überblick über alle Werkzeuge, Geräte und deren Verfügbarkeit.</p>
+            <div class="card h-100 shadow border-0 hover-shadow">
+                <div class="card-body">
+                    <i class="oi oi-magnifying-glass text-primary" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-3 fw-semibold">Bestandsübersicht</h5>
+                    <p class="card-text text-muted">
+                        Behalten Sie den Überblick über alle Werkzeuge, Geräte und deren Verfügbarkeit.
+                    </p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <i class="oi oi-calendar" style="font-size: 2rem;"></i>
-                    <h5 class="card-title mt-3">Wartungsplanung</h5>
-                    <p class="card-text">Automatisieren Sie Wartungstermine und verlängern Sie die Lebensdauer Ihrer Ausstattung.</p>
+            <div class="card h-100 shadow border-0 hover-shadow">
+                <div class="card-body">
+                    <i class="oi oi-calendar text-success" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-3 fw-semibold">Wartungsplanung</h5>
+                    <p class="card-text text-muted">
+                        Automatisieren Sie Wartungstermine und verlängern Sie die Lebensdauer Ihrer Ausstattung.
+                    </p>
                 </div>
             </div>
         </div>
+
         <div class="col-md-4">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body text-center">
-                    <i class="oi oi-people" style="font-size: 2rem;"></i>
-                    <h5 class="card-title mt-3">Ausleihe & Zuweisung</h5>
-                    <p class="card-text">Verwalten Sie die Nutzung und Zuständigkeiten für jedes einzelne Gerät.</p>
+            <div class="card h-100 shadow border-0 hover-shadow">
+                <div class="card-body">
+                    <i class="oi oi-people text-warning" style="font-size: 2.5rem;"></i>
+                    <h5 class="card-title mt-3 fw-semibold">Ausleihe & Zuweisung</h5>
+                    <p class="card-text text-muted">
+                        Verwalten Sie die Nutzung und Zuständigkeiten für jedes einzelne Gerät.
+                    </p>
                 </div>
             </div>
         </div>
     </div>
+
     <AuthorizeView Roles="Admin,User">
-        <div class="row mt-2">
+        <div class="row mt-4">
             <div class="col-12 text-center">
                 <p class="text-muted">Wählen Sie links im Menü eine Funktion aus, um zu beginnen.</p>
             </div>
         </div>
     </AuthorizeView>
+
     <AuthorizeView Roles="Pending">
-        <div class="row mt-2">
+        <div class="row mt-4">
             <div class="col-12 text-center">
-                <p class="text-danger">Dein Konto wurde erfolgreich erstellt, aber du musst noch auf eine Freigabe für deinen Zugriff auf das System durch einen Administrator warten.</p>
+                <p class="text-danger fw-semibold">
+                    Dein Konto wurde erfolgreich erstellt, aber du musst noch auf eine Freigabe für deinen Zugriff durch einen Administrator warten.
+                </p>
             </div>
         </div>
     </AuthorizeView>

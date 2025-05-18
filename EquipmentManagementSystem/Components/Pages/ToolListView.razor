@@ -9,7 +9,12 @@
 @attribute [Authorize(Roles = "User,Admin")]
 
 <PageTitle>Werkzeugliste</PageTitle>
-<h1 class="mb-4">Werkzeugliste</h1>
+<div class="d-flex justify-content-between mb-2">
+    <h2 class="mb-2">Werkzeugliste</h2>
+    <AuthorizeView Roles="Admin">
+        <button class="btn btn-primary" @onclick="NavigateToCreateTool">Werkzeug anlegen</button>
+    </AuthorizeView>
+</div>
 
 @if (tools is null)
 {
@@ -21,7 +26,7 @@ else if (!tools.Any())
 }
 else
 {
-    <table class="table table-hover">
+    <table class="table table-hover table-striped">
         <thead>
         <tr>
             <th>Name</th>
@@ -59,4 +64,10 @@ else
     {
         NavigationManager.NavigateTo($"/tool/{toolId}", true);
     }
+    
+    private void NavigateToCreateTool()
+    {
+        NavigationManager.NavigateTo("/tools/create", true);
+    }
+    
 }

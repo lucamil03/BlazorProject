@@ -12,7 +12,7 @@
 
 <PageTitle>Meine Reservierungen</PageTitle>
 
-<h3>Meine Reservierungen</h3>
+<h2 class="mb-2">Meine Reservierungen</h2>
 
 @if (reservations == null)
 {
@@ -24,7 +24,7 @@ else if (!reservations.Any())
 }
 else
 {
-    <table class="table">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th>Werkzeug</th>
