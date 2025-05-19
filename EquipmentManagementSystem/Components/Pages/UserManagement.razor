@@ -9,7 +9,6 @@
 @inject UserManager<ApplicationUser> UserManager
 @attribute [Authorize(Roles="Admin")]
 
-
 <PageTitle>Benutzerverwaltungt</PageTitle>
 <h2 class="mb-2">Benutzerverwaltung</h2>
 
@@ -62,7 +61,6 @@ else
             var userRole = await UserManager.GetRolesAsync(user);
             userRoles.Add(user.Id, userRole.FirstOrDefault() ?? "Pending");
         }
-        Console.WriteLine("test1");
 
     }
 

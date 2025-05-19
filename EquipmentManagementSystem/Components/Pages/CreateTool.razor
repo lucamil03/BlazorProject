@@ -1,10 +1,11 @@
 @page "/tools/create"
+@rendermode InteractiveServer
+
 @using Microsoft.AspNetCore.Authorization
 @using EquipmentManagementSystem.Data
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "Admin")]
-@rendermode InteractiveServer
 <PageTitle>Werkzeug anlegen</PageTitle>
 
 <h3>Neues Werkzeug anlegen</h3>

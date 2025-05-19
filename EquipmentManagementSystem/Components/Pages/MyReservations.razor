@@ -1,4 +1,6 @@
 @page "/myReservations"
+@rendermode InteractiveServer
+
 @using EquipmentManagementSystem.Data
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
@@ -8,7 +10,6 @@
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject NavigationManager NavigationManager
 @attribute [Authorize(Roles = "User,Admin")]
-@rendermode InteractiveServer
 
 <PageTitle>Meine Reservierungen</PageTitle>
 
@@ -97,7 +98,7 @@ else
         DbContext.Reservations.Remove(reservation);
         await DbContext.SaveChangesAsync();
 
-        NavigationManager.NavigateTo("/myReservations", true);
-
+        reservations?.Remove(reservation);
+        StateHasChanged();
     }
 }

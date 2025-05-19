@@ -1,11 +1,12 @@
 @page "/tools"
+@rendermode InteractiveServer
+
 @using EquipmentManagementSystem.Data
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.EntityFrameworkCore
 @inject ApplicationDbContext DbContext
 @inject NavigationManager NavigationManager
 
-@rendermode InteractiveServer
 @attribute [Authorize(Roles = "User,Admin")]
 
 <PageTitle>Werkzeugliste</PageTitle>
@@ -33,6 +34,9 @@ else
             <th>Aktueller Status</th>
             <th>Standort</th>
             <th>Kurzbeschreibung</th>
+            <AuthorizeView Roles="Admin">
+                <th>Aktion</th>
+            </AuthorizeView>
         </tr>
         </thead>
         <tbody>
@@ -43,6 +47,13 @@ else
                 <td>@ToolStatusHelper.GetStatusLabel(tool, tool.Reservations.ToList())</td>
                 <td>@tool.Location</td>
                 <td>@tool.Description</td>
+                <AuthorizeView Roles="Admin">
+                    <td>
+                        <button class="btn btn-danger btn-sm" @onclick="() => DeleteToolAsync(tool.Id)">
+                            Löschen
+                        </button>
+                    </td>
+                </AuthorizeView>
             </tr>
         }
         </tbody>
@@ -54,10 +65,35 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadToolsAsync();
+    }
+
+    private async Task LoadToolsAsync()
+    {
         tools = await DbContext.Tools
-            .Include(t => t.Reservations) //sonst haben wir die Reservations nicht dabei
+            .Include(t => t.Reservations)
             .OrderBy(t => t.Name)
             .ToListAsync();
+    }
+
+    private async Task DeleteToolAsync(int toolId)
+    {
+        var toolToDelete = await DbContext.Tools
+            .Include(t => t.Reservations)
+            .FirstOrDefaultAsync(t => t.Id == toolId);
+
+        if (toolToDelete is not null)
+        {
+            DbContext.Reservations.RemoveRange(toolToDelete.Reservations);
+
+            DbContext.Tools.Remove(toolToDelete);
+
+            await DbContext.SaveChangesAsync();
+
+            await LoadToolsAsync();
+
+            StateHasChanged();
+        }
     }
 
     private void NavigateToDetail(int toolId)

@@ -69,7 +69,7 @@ h1:focus {
     color: var(--bs-primary);
 }
 
-.nav-link.active {
-    background-color: var(--bs-primary) !important;
+.nav-link.active[id="test"] {
+    background-color: var(--bs-primary);
 }
 

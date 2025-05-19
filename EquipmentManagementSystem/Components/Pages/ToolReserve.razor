@@ -1,4 +1,6 @@
 @page "/tool/{ToolId:int}/reserve"
+@rendermode InteractiveServer
+
 @using EquipmentManagementSystem.Data
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
@@ -8,7 +10,6 @@
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize(Roles = "User,Admin")]
-@rendermode InteractiveServer
 
 <PageTitle>Werkzeug reservieren</PageTitle>
 
