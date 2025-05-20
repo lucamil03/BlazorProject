@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EquipmentManagementSystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ba7ea3db5570d07598f8cdd50b68f89516ee126e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+902d609b663ee88c80de367b199ebad943e9f4d0")]
 [assembly: System.Reflection.AssemblyProductAttribute("EquipmentManagementSystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EquipmentManagementSystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -133,13 +133,6 @@ else
         NavigationManager.NavigateTo($"/tool/{ToolId}", true);
     }
 
-    private DateTime ToUtcDate(DateTime date)
-    {
-        if (date.Kind == DateTimeKind.Utc)
-            return date;
-        return date.ToUniversalTime();
-    }
-
     private void NavigateBack()
     {
         NavigationManager.NavigateTo($"/tool/{ToolId}", true);
